@@ -28,15 +28,23 @@ Your first stop is Red Hat Developer Hub -- Parasol's internal developer portal.
 . Log in with your credentials:
 * Username: `{user}`
 * Password: `{password}`
++
+image::rhdh-login.png[Red Hat Developer Hub login page,link=self,window=blank,width=700]
 
-. Take a moment to look around the interface. Notice the left sidebar navigation:
-* **Catalog** -- the software catalog where all applications, components, and APIs are registered
-* **Create** -- self-service templates for provisioning new projects and environments
-* **Lightspeed** -- an AI assistant that can answer questions about the platform
+. After logging in, you will see the Developer Hub home page. This is the starting point for all developer activity at Parasol.
++
+image::rhdh-homepage.png[Red Hat Developer Hub home page,link=self,window=blank,width=700]
+
+. Take a moment to look around the interface:
+* **Catalog** (left sidebar) -- the software catalog where all applications, components, and APIs are registered
+* **Self-Service** (the **+** button at the top of the page) -- templates for provisioning new projects and environments
+* **Lightspeed** (the hovering icon in the bottom-right corner) -- an AI assistant that can answer questions about the platform
 
 === Exercise 2: Find the Parasol application in the software catalog
 
 . Click **Catalog** in the left sidebar.
++
+image::rhdh-catalog-main.png[Software catalog showing all registered components,link=self,window=blank,width=700]
 
 . Use the **Kind** dropdown to filter for **System** entities.
 
@@ -49,18 +57,18 @@ This is the Parasol Insurance application system. It groups all the components, 
 * Look at the dependency relationships between components
 * Click on a component to see its detail page
 
-. On a component detail page, explore the tabs:
+. On the component detail page, explore the tabs:
 * **Overview** -- ownership, lifecycle, and system information
-* **CI/CD** -- pipeline runs and build status
 * **API** -- provided and consumed API definitions
-* **Dependencies** -- what this component depends on and what depends on it
+* **Relations** -- what this component depends on and what depends on it
++
+image::rhdh-component-detail.png[Component detail page with Overview and CI/CD tabs,link=self,window=blank,width=700]
 
-. Click the **API** tab and find the **parasol-insurance-api**. Click on it, then select the **Definition** tab.
+. On the **API** tile, find the **parasol-insurance-api**. Click on it, then select the **Definition** tab.
 +
 The API documentation is rendered directly from the source repository. When the code changes, the docs stay current automatically -- no separate wiki to maintain.
-
-// TODO: Add screenshot of Developer Hub catalog showing the Parasol Insurance system
-// image::rhdh-catalog-parasol-system.png[Parasol Insurance system in the Developer Hub catalog,link=self,window=blank,width=700]
++
+image::rhdh-api-definition.png[API definition rendered from source in Developer Hub,link=self,window=blank,width=700]
 
 === Exercise 3: Ask the AI assistant
 
@@ -69,6 +77,8 @@ Developer Hub includes an AI assistant called **Lightspeed** that can answer que
 . Click the **Lightspeed** icon in the bottom-right corner of the Developer Hub interface.
 
 . Use the three dots menu in the top-right of the Lightspeed window to switch to full-screen view.
++
+image::rhdh-lightspeed.png[Lightspeed AI assistant in Developer Hub,link=self,window=blank,width=700]
 
 . Try asking a question about the Parasol application:
 +
@@ -77,6 +87,9 @@ Tell me about the parasol-insurance-api API in the catalog
 ----
 
 . Review the response. Lightspeed pulls information from the software catalog and documentation to give you contextual answers.
++
+image::rhdh-lightspeed-response.png[Lightspeed AI assistant in Developer Hub,link=self,window=blank,width=700]
+
 
 . Try another question:
 +
@@ -106,7 +119,9 @@ Now that you know your way around, it is time to get to work. You have been assi
 
 Developer Hub provides self-service templates that let you provision environments without filing tickets. The platform team has created a template that sets up everything you need: a feature branch, a dedicated pipeline, and a catalog entry to track your work.
 
-. In Developer Hub, click the **Create** button (the **+** icon) at the top of the page.
+. In Developer Hub, click the **Self-Service** button (the **+** icon) at the top of the page.
++
+TIP: If Lightspeed is still covering the interface, close it by clicking the small **X** icon in the bottom-right corner. The assistant is always available -- you can reopen it at any time by clicking the same hovering icon.
 
 . Browse the available software templates. These are golden path templates maintained by the platform team.
 
@@ -116,23 +131,33 @@ Developer Hub provides self-service templates that let you provision environment
 * **Branch name**: Enter a short name for your feature branch, for example: `claims-stats`
 +
 TIP: Keep the branch name short. It will be used to generate OpenShift Routes, which have length restrictions.
++
+image::rhdh-template-values.png[Development environment provisioned with one click,link=self,window=blank,width=700]
 
-. Click **Create** and watch the provisioning progress:
+. Click **Review** to review the details, and then click **Create** and watch the provisioning progress:
 * A feature branch is created in the source repository
 * A CI/CD pipeline is configured for your branch
 * A new component is registered in the Developer Hub catalog
 
 . When provisioning completes, click **Open in Catalog** to see your new component.
++
+image::rhdh-template-results.png[Development environment provisioned with one click,link=self,window=blank,width=700]
 
-// TODO: Add screenshot of the template provisioning results
-// image::rhdh-template-results.png[Development environment provisioned with one click,link=self,window=blank,width=700]
+. On the component page, click **View Source** to open the feature branch in GitLab.
++
+You may be prompted to log in to GitLab. Use the same credentials:
++
+* Username: `{user}`
+* Password: `{password}`
++
+Take a look at the repository -- this is the branch where your changes will live until you merge them.
 
 === Verify
 
 You now have:
 
 * A feature branch (`claims-stats`) in the Parasol source repository
-* A CI/CD pipeline wired to your branch
+* A CI/CD pipeline wired to your branch (this will be visible on the `CI` tab once we build it in the next section)
 * A catalog entry in Developer Hub tracking your development work
 
 '''
@@ -144,17 +169,18 @@ With your development environment ready, it is time to write code. You will use 
 
 === Exercise 1: Open Dev Spaces
 
-. From your component page in Developer Hub, click the **Dev Spaces** link to open a cloud workspace for your feature branch.
+. From your component overview page in Developer Hub, click the **Open in Dev Spaces** link to open a cloud workspace for your feature branch.
 +
 Alternatively, you can open Dev Spaces directly at {devspaces_url}[{devspaces_url}^] and create a workspace from your repository URL.
 
-. The first time Dev Spaces opens, you will see several authorization prompts. These are security gates that ensure the IDE only acts with your explicit consent:
+. The first time Dev Spaces opens, click **Log In With OpenShift**. You will see several authorization prompts. These are security gates that ensure the IDE only acts with your explicit consent:
 
 .. **Authorize access to OpenShift** -- click **Allow selected permissions**
 .. **Do you trust the authors of this repository?** -- click **Continue**
-.. **GitLab login** -- log in with your credentials (`{user}` / `{password}`)
+.. **GitLab login** -- log in with your credentials if needed (`{user}` / `{password}`)
+.. **GitLab Authorization** -- click **Authorize** to give DevSpaces permission to open your branch (if you wait too long here (20s or more), you may need to click **Retry** to try again after giving permission)
 .. **Trust the workspace files** -- click **Yes, I trust the authors**
-.. **Install extensions** -- click to install the recommended extensions including the AI coding assistant
+.. **Trust publishers and install** -- click to install the recommended extensions including the AI coding assistant
 .. Dismiss any popups about MicroProfile or Dependency Analytics by clicking the **X**
 +
 WARNING: If you miss the "trust the authors" prompt, Dev Spaces opens in Restricted Mode and you will see a highlighted banner at the bottom of the window. Click the banner to confirm trust so extensions load properly.
@@ -164,9 +190,8 @@ WARNING: If you miss the "trust the authors" prompt, Dev Spaces opens in Restric
 * The terminal has CLI tools pre-installed (`oc`, `mvn`, etc.)
 * Extensions for Java, Quarkus, YAML, and the AI coding assistant are already configured
 * Git is connected to your feature branch
-
-// TODO: Add screenshot of the Dev Spaces workspace
-// image::devspaces-workspace-loaded.png[Cloud development workspace with the Parasol Insurance project fully loaded,link=self,window=blank,width=700]
++
+image::devspaces-workspace-loaded.png[Cloud development workspace with the Parasol Insurance project fully loaded,link=self,window=blank,width=700]
 
 === Exercise 2: Start the application in development mode
 
@@ -180,7 +205,7 @@ Before writing new code, start the application to see what you are working with.
 
 . Select **Start Development Mode (Hot Reload + debug)**.
 
-. Wait for the application to start. When Dev Spaces shows a popup notification to open the application, click to **open it in a new tab**.
+. Wait for the application to start. When Dev Spaces shows a popup notification to open the application, click to **Open In New Tab**.
 +
 TIP: If you miss the popup, open the application from the *ENDPOINTS* panel in the lower left of the Dev Spaces window. Find *quarkus-dev (8080/https)* and click the arrow icon.
 
@@ -188,21 +213,22 @@ TIP: If you miss the popup, open the application from the *ENDPOINTS* panel in t
 * This is a claims and customer management platform used by Parasol's agents
 * It handles insurance claims processing and customer communication
 * Behind the scenes, it uses Apache Kafka for message routing
-
-// TODO: Add screenshot of the Parasol application
-// image::parasol-app-home.png[Parasol Insurance application dashboard,link=self,window=blank,width=700]
++
+image::parasol-app-home.png[Parasol Insurance application dashboard,link=self,window=blank,width=700]
 
 === Exercise 3: Add the claims statistics endpoint
 
 Now implement the feature. You will create a new REST endpoint that returns claims statistics (totals, breakdowns by category and status).
 
-. In the Explorer on the left, navigate to `src/main/java/com/parasol/`.
+. Back in Dev Spaces, In the Explorer on the left, navigate to `src/main/java/com/parasol/`.
 
 . Right-click on the `parasol` directory and select **New File**. Name it `ClaimsStatsResource.java`.
++
+image::parasol-app-newfile.png[Parasol Insurance application dashboard,link=self,window=blank,width=700]
 
 . Copy and paste the following code into the new file:
 +
-[source,java]
+[source,java,role="copypaste"]
 ----
 package com.parasol;
 
@@ -255,7 +281,7 @@ NOTE: This code works, but it has some shortcuts. You used `System.out.println` 
 
 . The file saves automatically. Quarkus dev mode detects the change and reloads the application -- no manual build step required.
 
-. In your browser, navigate to the running application and change the URL path to `/api/claims/stats`.
+. In your browser, switch to the tab for the Parasol running application, remove the `dashboard.html` from the URL and add `/api/claims/stats` to the end of the URL in the browser's address bar.
 +
 You should see JSON data with claim totals and breakdowns:
 +
@@ -273,11 +299,10 @@ You should see JSON data with claim totals and breakdowns:
   }
 }
 ----
-
++
 The new endpoint is working. You wrote the code, saved the file, and the application reloaded in seconds. No build commands, no repackaging, no redeployment.
-
-// TODO: Add screenshot of the claims stats JSON response
-// image::parasol-claims-stats-devmode.png[Claims statistics endpoint returning JSON data in dev mode,link=self,window=blank,width=700]
++
+image::parasol-claims-stats-devmode.png[Claims statistics endpoint returning JSON data in dev mode,link=self,window=blank,width=700]
 
 === Verify
 
@@ -309,9 +334,8 @@ Add claims statistics API endpoint
 ----
 
 . Click the dropdown arrow next to the **Commit** button and select **Commit & Push**.
-
-// TODO: Add screenshot of the SCM commit view
-// image::scm-commit.png[Developer commits and pushes code from the IDE,link=self,window=blank,width=700]
++
+image::scm-commit.png[Developer commits and pushes code from the IDE,link=self,window=blank,width=700]
 
 === Exercise 2: Watch the pipeline in Developer Hub
 
@@ -319,37 +343,37 @@ Add claims statistics API endpoint
 
 . Navigate to your component in the catalog.
 
-. Click the **CI/CD** tab to see the pipeline run that was triggered by your push.
+. Click the **CI** tab to see the pipeline run that was triggered by your push. (you can ignore any failed GitLab pipelines shown - we are using OpenShift pipelines in this exercise)
 +
-The pipeline runs several stages:
++ Click to expand the pipeline run to see the that the pipeline runs several stages:
 +
 * **Clone** -- source code pulled from the Git repository
 * **SonarQube SAST** -- static analysis and code quality scanning
 * **Build and Push** -- application compiled, container image built and pushed to the registry
 * **Re-rollout app** -- updated application deployed to the dev environment
 
-. Watch the pipeline progress. The **SonarQube SAST** stage will fail.
-
-// TODO: Add screenshot of the pipeline running in Developer Hub
-// image::ocp-pipeline-running.png[Pipeline run in Developer Hub showing stages in progress,link=self,window=blank,width=700]
+. Watch the pipeline progress. The **sonar-scan** stage will fail.
++
+image::ocp-pipeline-running.png[Pipeline run in Developer Hub showing stages in progress,link=self,window=blank,width=700]
 
 === Exercise 3: Diagnose the pipeline failure
 
 The pipeline caught something. The SonarQube quality gate failed because of the code shortcuts you took earlier.
 
-. Click on the failed pipeline run to see the details.
+. Click on the failed `sonar-scan` step to see the details.
 
 . Find the **SonarQube report URL** in the pipeline log output.
++
+image::ocp-pipeline-sonar-fail.png[SonarQube report showing code smell violations,link=self,window=blank,width=700]
 
 . Open the SonarQube report to see the specific issues:
 * **`System.out.println` usage** -- standard output should not be used for logging in production code
 * **Empty catch block** -- exceptions should not be silently swallowed
 * **Field injection** -- SonarQube recommends constructor injection over `@Inject` field injection for better testability
-
++
 These are not suggestions. They are hard quality gates. Code with these violations does not move forward.
-
-// TODO: Add screenshot of the SonarQube report
-// image::ocp-pipeline-sonar-report.png[SonarQube report showing code smell violations,link=self,window=blank,width=700]
++
+image::ocp-pipeline-sonar-report.png[SonarQube report showing code smell violations,link=self,window=blank,width=700]
 
 === Exercise 4: Fix the code with AI assistance
 
@@ -443,9 +467,8 @@ public class ClaimsStatsResource {
 * The SonarQube quality gate passes this time
 * The image is built and pushed
 * The application is re-deployed
-
-// TODO: Add screenshot of the pipeline passing
-// image::ocp-pipeline-passed.png[All pipeline stages passing after fixing code smells,link=self,window=blank,width=700]
++
+image::ocp-pipeline-passed.png[All pipeline stages passing after fixing code smells,link=self,window=blank,width=700]
 
 === Verify
 
@@ -463,83 +486,93 @@ You have now:
 
 The pipeline passed. Your code has been built, tested, scanned, and packaged. Now it is time to merge your changes and see them deployed to production through GitOps.
 
-=== Exercise 1: Merge your changes
+=== Exercise 1: Merge your feature branch
 
-. Open **GitLab** at {gitlab_url}[{gitlab_url}^] and log in with your credentials.
+. In **Developer Hub**, navigate to your component and click **View Source** to open the repository in GitLab.
 
-. Navigate to the Parasol Insurance repository.
-
-. You should see a prompt to create a **Merge Request** from your feature branch. Click it.
+. You should see a prompt at the top to **Create merge request** from your feature branch. Click it.
 +
 If no prompt appears, click **Merge Requests** in the left sidebar, then **New Merge Request**, and select your branch.
 
 . Review the merge request:
-* The diff shows your new `ClaimsStatsResource.java` file with the corrected code
-* The pipeline status shows green (all checks passed)
+* Each commit on the _Commits_ tab near the bottom shows your two commits above the initial one created by this environment
+* The _Changes_ tab shows your new `ClaimsStatsResource.java` file with the corrected code
 
-. Click **Merge** to merge your changes into the main branch.
+. Click **Create merge request** at the bottom to create the new request. The new request is created and opened for you and others to review.
 
-=== Exercise 2: Watch GitOps deploy to production
-
-. Open the **Argo CD console** at {argocd_url}[{argocd_url}^].
+. At this point, the code would normally be reviewed and approved by others, but for now, to merge your changes into the main branch, just click **Merge**.
 +
-Log in with the credentials provided (check the workshop details page or the Terminal tab for the Argo CD password).
+image::gitlab-merged.png[Merge complete,link=self,window=blank,width=700]
 
-. Find the **parasol-insurance** application in the Argo CD dashboard.
+Your changes are now merged into the main branch. The dev environment pipeline will pick this up and redeploy automatically. But to promote to production, you need to create a release.
 
-. Watch the sync process:
-* Argo CD detects that the desired state in Git has changed
-* It reconciles the cluster to match the new state
-* The application is deployed with your new feature
+=== Exercise 2: Create a release tag
 
-. Once the status shows **Synced** and **Healthy**, your feature is live.
+In a real organization, promoting code to production is typically handled by platform engineers or release managers. For this workshop, you will perform this step yourself to see the full end-to-end flow.
 
-// TODO: Add screenshot of Argo CD showing the synced application
-// image::argocd-synced.png[Argo CD showing the Parasol application synced and healthy,link=self,window=blank,width=700]
+. In GitLab, navigate back to your **parasol-insurance** repository (use the project name in the breadcrumb at the top, it should be `{user} / parasol-insurance`. You can click the GitLab icon at the upper left to see all your repos).
 
-=== Exercise 3: Verify the feature in production
+. In the left sidebar, click **Code**, then **Tags**.
 
-. Find the Parasol application route in Developer Hub or the OpenShift Console.
+. Click **New tag**.
 
-. Open the production application and navigate to `/api/claims/stats`.
+. Fill in the tag details:
+* **Tag name**: `1.1`
+* **Create from**: `main`
+* **Message**: `Add claims statistics API endpoint`
 
-. Confirm the claims statistics endpoint is returning data in the production environment.
+. Click **Create tag**.
++
+image::gitlab-create-tag.png[Creating a release tag in GitLab,link=self,window=blank,width=700]
 
-The feature you wrote, tested, fixed, and merged is now live -- without a single deployment ticket.
+Creating this tag triggers a pipeline behind the scenes. When the pipeline completes (it will take a few minutes), it generates a merge request against your `{user}/parasol-insurance-manifests` repository -- this is the GitOps manifests repo that drives production deployments through Argo CD.
 
-=== Exercise 4: Explore the OpenShift Console
+=== Exercise 3: Approve the GitOps promotion
 
-For deeper debugging and monitoring, the OpenShift web console gives you direct access to the platform.
+. In GitLab, navigate to the `{user}/parasol-insurance-manifests` repository.
++
+You can find it by clicking the GitLab logo in the top-left to go to the home page, then selecting the project from the list.
 
-. Open the **OpenShift Console** at {console_url}[{console_url}^] (or use the tab in the right panel).
+. Click **Merge Requests** in the left sidebar.
 
-. Log in with your credentials.
+. Find the merge request that bumps the Argo CD values to your new tag (`1.1`). Click on it.
 
-. Navigate to the **Developer** perspective (toggle in the top-left if you are in Administrator view).
+. Review the changes -- you will see the image tag being updated to reference your new release.
 
-. Select the `{parasol_dev_ns}` namespace.
+. Click **Merge** to approve the promotion to production.
++
+image::gitlab-manifests-mr.png[Merge request updating the production image tag in the GitOps manifests repo,link=self,window=blank,width=700]
 
-. Explore the available views:
-* **Topology** -- visual representation of your application and its components
-* **Observe** -- application metrics and dashboards
-* **Project** -- resource usage and quotas
+Argo CD watches this manifests repository. Once the merge completes, it detects the change and begins rolling out the new version to production.
 
-. Click on the Parasol application in the Topology view and explore:
-* **Resources** -- pods, services, routes
-* **Observe** -- CPU, memory, and network metrics
-* Click **View logs** on a pod to see application logs directly
+=== Exercise 4: Verify the feature in production
 
-// TODO: Add screenshot of the OpenShift Console topology view
-// image::ocp-topology.png[OpenShift Console showing the Parasol application topology,link=self,window=blank,width=700]
+. Switch back to **Developer Hub**.
+
+. Navigate to the **Catalog** and find the main **Parasol Insurance** component owned by your user -- not the `claims-stats` branch component. You can click the **Owned** filter to narrow the list.
+
+. Click on the component, then select the **Topology** tab.
++
+The topology view shows both the dev and prod environments for the application.
+
+. Watch the production environment. It may initially appear red while the new version rolls out. Once the deployment completes, it will turn blue indicating the application is healthy.
++
+image::rhdh-topology-dev-prod.png[Developer Hub topology showing dev and prod environments,link=self,window=blank,width=700]
+
+. Click the small **Open** icon (the arrow at the upper right of the production application) to open it in a new tab.
+
+. Remove the `dashboard.html` and append `/api/claims/stats` to the URL and confirm the claims statistics endpoint is returning data in the production environment.
+
+The feature you wrote, tested, fixed, and merged is now live in production -- without a single deployment ticket.
 
 === Verify
 
 You have now:
 
 * Merged your feature branch into main via GitLab
-* Watched Argo CD deploy the changes to production automatically
+* Created a release tag to trigger the promotion pipeline
+* Approved a GitOps merge request to update production manifests
 * Verified the claims statistics endpoint is live in production
-* Used the OpenShift Console for deeper application monitoring
 
 '''
 
@@ -555,8 +588,8 @@ You just completed the full developer journey at Parasol Insurance -- from onboa
 * Wrote and tested code in a preconfigured cloud IDE with Dev Spaces
 * Used an AI coding assistant to fix code quality issues
 * Pushed code through an automated CI/CD pipeline with quality gates
-* Deployed to production using GitOps with Argo CD
-* Monitored the application using the OpenShift Console
+* Created a release tag and approved a GitOps promotion to deploy to production
+* Verified the feature in production through Developer Hub's topology view
 
 **Key takeaways:**
 

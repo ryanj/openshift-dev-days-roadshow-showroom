@@ -34,7 +34,7 @@ This workshop is designed for **90 minutes** of hands-on work.
 
 Your lab environment includes:
 
-* **OpenShift Console**: {console_url}[{console_url}^]
+* **OpenShift Console**: {openshift_console_url}[{openshift_console_url}^]
 * **Red Hat Developer Hub**: {rhdh_url}[{rhdh_url}^]
 * **Dev Spaces**: {devspaces_url}[{devspaces_url}^]
 * **GitLab**: {gitlab_url}[{gitlab_url}^]
