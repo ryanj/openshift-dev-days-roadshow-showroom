@@ -22,12 +22,16 @@ This workshop is designed for **90 minutes** of hands-on work.
 | Open Dev Spaces, explore the IDE, implement a feature with an AI coding assistant
 
 | Ship it
-| 20 min
-| Push code, view CI pipeline in Developer Hub, fix a pipeline failure, push again
+| 15 min
+| Push code, view CI pipeline in Developer Hub, diagnose a quality gate failure
+
+| Call in the AI
+| 10 min
+| Use an agentic AI assistant to fix code smells, push the fix, watch the pipeline pass
 
 | Go live
 | 15 min
-| Merge to main, watch GitOps deploy, verify the feature in production, explore the OpenShift Console
+| Merge to main, create a release tag, approve the GitOps promotion, verify the feature in production
 |===
 
 == Environment access

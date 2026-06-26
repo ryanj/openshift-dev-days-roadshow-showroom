@@ -30,9 +30,10 @@ This workshop follows one continuous story:
 
 . **Meet the platform** -- Log into Developer Hub, explore the software catalog, and get oriented
 . **Your mission** -- Find the task assigned to you and set up your development environment
-. **Build the feature** -- Open Dev Spaces, write code with an AI assistant, and test locally
-. **Ship it** -- Push your code through the CI/CD pipeline, fix any issues, and push again
-. **Go live** -- Merge your changes, watch GitOps deploy to production, and verify the result
+. **Build the feature** -- Open Dev Spaces, write code, and test locally
+. **Ship it** -- Push your code through the CI/CD pipeline and hit a quality gate
+. **Call in the AI** -- Use an agentic AI assistant to fix the code, push again, and pass the pipeline
+. **Go live** -- Merge your changes, create a release, and verify the feature in production
 
 No context switching between disconnected tools. One continuous flow from idea to production.
 

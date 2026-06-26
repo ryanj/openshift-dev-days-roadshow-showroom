@@ -82,6 +82,7 @@ image::rhdh-lightspeed.png[Lightspeed AI assistant in Developer Hub,link=self,wi
 
 . Try asking a question about the Parasol application:
 +
+[source,role="copypaste"]
 ----
 Tell me about the parasol-insurance-api API in the catalog
 ----
@@ -93,6 +94,7 @@ image::rhdh-lightspeed-response.png[Lightspeed AI assistant in Developer Hub,lin
 
 . Try another question:
 +
+[source,role="copypaste"]
 ----
 What components make up the parasol-insurance system?
 ----
@@ -208,6 +210,8 @@ Before writing new code, start the application to see what you are working with.
 . Wait for the application to start. When Dev Spaces shows a popup notification to open the application, click to **Open In New Tab**.
 +
 TIP: If you miss the popup, open the application from the *ENDPOINTS* panel in the lower left of the Dev Spaces window. Find *quarkus-dev (8080/https)* and click the arrow icon.
++
+image::devspaces-workspace-popup.png[Quarkus popup,link=self,window=blank,width=700]
 
 . Browse the running Parasol Insurance application:
 * This is a claims and customer management platform used by Parasol's agents
@@ -327,11 +331,14 @@ Your feature works locally. Time to push it through the platform's CI/CD pipelin
 
 . Click the **+** icon next to the file to stage it.
 
-. Enter a commit message:
+. Enter a commit message in the text field:
 +
+[source,role="copypaste"]
 ----
 Add claims statistics API endpoint
 ----
++
+WARNING: Do not skip the commit message. If you click **Commit & Push** with an empty message field, the editor will open a file called `COMMIT_EDITMSG` and wait for you to type a message and close the file tab (click the **X** on the `COMMIT_EDITMSG` tab). A spinning progress indicator may make it look like something is happening -- it is not. It is waiting for you to enter a message and close the file. If this happens, type your message on the first line, close the tab, and the commit will proceed.
 
 . Click the dropdown arrow next to the **Commit** button and select **Commit & Push**.
 +
@@ -375,35 +382,71 @@ These are not suggestions. They are hard quality gates. Code with these violatio
 +
 image::ocp-pipeline-sonar-report.png[SonarQube report showing code smell violations,link=self,window=blank,width=700]
 
-=== Exercise 4: Fix the code with AI assistance
+=== Verify
 
-Instead of manually researching the Quarkus logging API and refactoring patterns, use the AI coding assistant that the platform team preconfigured in Dev Spaces.
+You have now:
+
+* Pushed code and triggered an automated CI/CD pipeline
+* Watched the SonarQube quality gate catch real code smells
+* Found the specific violations in the SonarQube report
+
+The pipeline did its job -- it caught problems before they reached production. Now you need to fix them.
+
+'''
+
+[#section-5]
+== Section 5: Call in the AI
+
+You could spend time researching the Quarkus logging API, reading SonarQube remediation guides, and manually refactoring your code. Or you could ask your AI coding assistant to do it for you.
+
+The platform engineering team has preconfigured a security team-approved agentic AI coding assistant (powered by Zoo Code) in every Dev Spaces workspace. This is not just a chatbot that suggests snippets. It is an AI agent that can read your entire project, understand the frameworks you are using, navigate across files to find patterns, and apply changes directly in your editor. You describe the problem in plain language, and it figures out the fix.
+
+=== Exercise 1: Fix the code with AI assistance
+
+Let's use the AI assistant to resolve the SonarQube violations.
 
 . Switch back to **Dev Spaces**.
 
-. Open the **Continue** AI assistant panel in the left sidebar.
-
-. Enter this prompt:
+. Click the **AI assistant** icon in the left sidebar.
 +
+image::zoo-code-sidebar.png[AI coding assistant icon in the Dev Spaces left sidebar,link=self,window=blank,width=700]
++
+Notice the controls at the bottom of the chat panel. You can switch between personas -- **Architect** for design guidance, **Code** for implementation, **Ask** for general questions, and **Debug** for troubleshooting. You can also select from the AI models that the platform and security teams have approved for use -- no shadow AI here -- and configure what types of actions the assistant can auto-approve (such as file edits or terminal commands). For this exercise, file edits require your approval -- you will need to click **Save** after each edit the assistant proposes to keep the human in the loop. Once developers build confidence in the assistant, this can be switched to auto-approve for a faster workflow.
+
+. At the bottom of the chat panel, click the persona selector and choose **Code** -- since we are editing implementation code, not architecting major changes.
++
+image::zoo-code-persona.png[Selecting the Code persona in the AI assistant,link=self,window=blank,width=700]
+
+. In the chat panel, enter this prompt:
++
+[source,role="copypaste"]
 ----
-The existing src/main/java/com/parasol/ClaimsStatsResource.java has
-code smells according to SonarQube - can you fix them? The
+The existing ClaimsStatsResource class has
+code smells according to SonarQube - please fix them. The
 System.out.println, field injection, and empty catch block. Don't
-throw any new exceptions, just log it.
+throw any new exceptions, just log it using standard Quarkus logging.
 ----
 +
-NOTE: If the AI response causes issues in the editor (a known issue with some models), open a new chat with the **+** button and try: "Please generate a fixed version of ClaimsStatsResource.java (do not try to edit it in place)." Then copy/paste the result.
+image::zoo-code-prompt.png[Entering a prompt to fix SonarQube violations,link=self,window=blank,width=700]
 
-. Review the changes the AI suggests:
+. Watch the assistant work. It reads your file, understands that this is a Quarkus project, and applies the fixes directly:
 * `System.out.println` replaced with `Log.info` from the Quarkus logging API
 * Empty `try-catch` removed -- exceptions propagate naturally
 * Field injection replaced with constructor injection
++
 
-. Accept the changes.
+. As changes are made by the assistant, you will need to approve them. Click **Save** to approve each file edit. Remember, the assistant requires your explicit approval before modifying any file.
++
+image::zoo-code-save.png[Clicking Save to approve the AI assistant's file edits,link=self,window=blank,width=700]
+
+. Once complete, the changes should be in the file. You can also look at diffs via the assistant:
++
+image::zoo-code-result.png[Clicking Save to approve the AI assistant's file edits,link=self,window=blank,width=700]
+
 
 . Verify the corrected code looks similar to this:
 +
-[source,java]
+[source,java,role="copypaste"]
 ----
 package com.parasol;
 
@@ -432,20 +475,24 @@ public class ClaimsStatsResource {
 
         Log.info("Fetching claim statistics");
 
-        var claims = claimsResource.getAllClaims();
-        stats.put("total", claims.size());
+        try {
+            var claims = claimsResource.getAllClaims();
+            stats.put("total", claims.size());
 
-        Map<String, Long> byCategory = new HashMap<>();
-        for (var claim : claims) {
-            byCategory.merge(claim.getCategory(), 1L, Long::sum);
-        }
-        stats.put("by_category", byCategory);
+            Map<String, Long> byCategory = new HashMap<>();
+            for (var claim : claims) {
+                byCategory.merge(claim.getCategory(), 1L, Long::sum);
+            }
+            stats.put("by_category", byCategory);
 
-        Map<String, Long> byStatus = new HashMap<>();
-        for (var claim : claims) {
-            byStatus.merge(claim.getStatus(), 1L, Long::sum);
+            Map<String, Long> byStatus = new HashMap<>();
+            for (var claim : claims) {
+                byStatus.merge(claim.getStatus(), 1L, Long::sum);
+            }
+            stats.put("by_status", byStatus);
+        } catch (Exception e) {
+            Log.error("Error fetching claim statistics", e);
         }
-        stats.put("by_status", byStatus);
 
         return stats;
     }
@@ -457,7 +504,7 @@ public class ClaimsStatsResource {
 * Commit message: `Fix code smells: use proper logging and remove empty catch block`
 * Click the dropdown arrow next to **Commit** and select **Commit & Push**
 
-=== Exercise 5: Verify the pipeline passes
+=== Exercise 2: Verify the pipeline passes
 
 . Switch back to **Developer Hub** and check the **CI/CD** tab.
 
@@ -474,15 +521,14 @@ image::ocp-pipeline-passed.png[All pipeline stages passing after fixing code sme
 
 You have now:
 
-* Pushed code and triggered an automated CI/CD pipeline
-* Diagnosed a quality gate failure using SonarQube reports
-* Used an AI assistant to fix code smells
+* Used an agentic AI assistant to fix code smells identified by SonarQube
 * Pushed the fix and watched the pipeline pass
+* Seen how AI assistance integrates into the platform's development workflow
 
 '''
 
-[#section-5]
-== Section 5: Go live
+[#section-6]
+== Section 6: Go live
 
 The pipeline passed. Your code has been built, tested, scanned, and packaged. Now it is time to merge your changes and see them deployed to production through GitOps.
 
