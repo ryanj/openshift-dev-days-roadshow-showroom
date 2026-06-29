@@ -23,9 +23,9 @@ Your first stop is Red Hat Developer Hub -- Parasol's internal developer portal.
 
 === Exercise 1: Explore Developer Hub
 
-. Open **Red Hat Developer Hub** at {rhdh_url}[{rhdh_url}^]
+. Select the **Developer Hub** tab on the right, or open **Red Hat Developer Hub** at {rhdh_url}[{rhdh_url}^]
 
-. Log in with your credentials:
+. Log in with your credentials using the OIDC provider:
 +
 --
 Username:
@@ -195,6 +195,8 @@ With your development environment ready, it is time to write code. You will use 
 . From your component overview page in Developer Hub, click the **Open in Dev Spaces** link to open a cloud workspace for your feature branch.
 +
 Alternatively, you can open Dev Spaces directly at {devspaces_url}[{devspaces_url}^] and create a workspace from your repository URL.
++
+image::rhdh-devspaces-link.png[Link to open pre-configured Dev Spaces seen in Red Hat Developer Hub,link=self,window=blank,width=700]
 
 . The first time Dev Spaces opens, click **Log In With OpenShift**. You will see several authorization prompts. These are security gates that ensure the IDE only acts with your explicit consent:
 
