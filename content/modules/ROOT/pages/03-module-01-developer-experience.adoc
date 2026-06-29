@@ -439,6 +439,8 @@ The platform engineering team has preconfigured a security team-approved agentic
 === Exercise 1: Fix the code with AI assistance
 
 Let's use the AI assistant to resolve the SonarQube violations.
++
+NOTE: We're using the link:https://www.zoocode.dev/[Zoo Code] open-source AI coding assistant. We've configured it to work with a large language model (LLM) we're hosting to facilitate this workshop.
 
 . Switch back to **Dev Spaces**.
 
@@ -479,7 +481,7 @@ image::zoo-code-save.png[Clicking Save to approve the AI assistant's file edits,
 image::zoo-code-result.png[Clicking Save to approve the AI assistant's file edits,link=self,window=blank,width=700]
 
 
-. Verify the corrected code looks similar to this:
+. Since LLMs are not deterministic, verify the corrected code looks similar to this:
 +
 [source,java,role="copypaste"]
 ----
@@ -578,7 +580,9 @@ The pipeline passed. Your code has been built, tested, scanned, and packaged. No
 
 . You should see a prompt at the top to **Create merge request** from your feature branch. Click it.
 +
-If no prompt appears, click **Merge Requests** in the left sidebar, then **New Merge Request**, and select your branch.
+image::gitlab-merge-prompt.png[GitLab prompt to open a Merge Request,link=self,window=blank,width=700]
++
+NOTE: If no prompt appears, click **Merge Requests** in the left sidebar, then **New Merge Request**, and select your branch.
 
 . Review the merge request:
 * Each commit on the _Commits_ tab near the bottom shows your two commits above the initial one created by this environment
@@ -591,6 +595,8 @@ If no prompt appears, click **Merge Requests** in the left sidebar, then **New M
 image::gitlab-merged.png[Merge complete,link=self,window=blank,width=700]
 
 Your changes are now merged into the main branch. The dev environment pipeline will pick this up and redeploy automatically. But to promote to production, you need to create a release.
+
+image::rhdh-dev-merge-build.png[Pipeline Run triggered after merging our MR,link=self,window=blank,width=700]
 
 === Exercise 2: Create a release tag
 
