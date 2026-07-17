@@ -12,10 +12,6 @@ tabs:
   - name: OpenShift Console
     url: 'https://console-openshift-console.${DOMAIN}'
 
-  - name: Terminal
-    path: /wetty
-    port: 443
-
   - name: GitLab
     url: 'https://gitlab-gitlab.${DOMAIN}'
 
